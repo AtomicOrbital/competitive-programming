@@ -30,56 +30,34 @@ class Solution {
 		res="1"+res;
 	return res;
 	}
+
+	bool isGreater(string s1,string s2){
+	if(s1.length()<s2.length()) return false;
+	else if(s1.length()==s2.length()){
+		for(long long i=0;i<s1.length();i++)
+			if(s1[i]<s2[i]) return false;	
+			else if(s1[i]>s2[i]) return true;
+		}
+	return true;	
+	}
 	
 	string bigMultiply(string s1,string s2){
-		if((s1[0]=='0' && s1.length()==1) || (s2[0]=='0'&& s2.length()==1))
-      	return "0";
-      	int neg=0;
-      	if(s1.at(0) == '-'){
-        	s1 = s1.substr(1);
-        	neg++;
-     	}
-      	if(s2.at(0) == '-'){
-        	s2 = s2.substr(1);
-        	neg--;
-      	}
-
-      	int n=s1.size(),m=s2.size();
-      	vector<int> ans(n+m,0);
-      	string final="";
-      	int carry,place,place_i,place_j;
-      	for(int i=m-1;i>=0;i--){
-          	carry=0;
-          	place_i= m-1-i;
-          	int digit_i = s2[i]-48;
-          	for(int j=n-1;j>=0;j--){
-              	place_j = n-1-j;
-              	place = place_i + place_j;
-             	int digit_j=s1[j]-48;
-              	int product = digit_i * digit_j;
-              	product+=ans[place]+carry;
-              	ans[place]=product%10;
-              	carry = product/10;
-          	}
-          	if(carry!=0){
-               ans[place+1]=carry;
-          	}
-      	}
-
-      	if(carry!=0){
-          ans[place+1]=carry;
-          place++;
-      	}
-      	for(int i=place;i>=0;i--)
-          	final+=(char)(ans[i]+48);
-  
-     	int i=0;
-      	while(final[i]=='0')
-          	i++;
-      	final = final.substr(i);
-      	if(neg!=0)
-          	final = "-"+final;
-      	return final;
+		string kq;
+		if(!isGreater(s1,s2)==false) swap(s1,s2);
+		for(int i=0;i<s1.length()+s2.length();i++) kq.push_back(0);
+		int i,j,tmp=0;
+		for(i=s1.length()-1;i>=0;i--){                 //      9  9
+			for(j=s2.length()-1;j>=0;j--){             //      9  9
+				kq[i+j+1]+=(s1[i]-'0')*(s2[j]-'0')+tmp;// 0  0  9  1
+				tmp=kq[i+j+1]/10;                      // 0  0  0  0
+				kq[i+j+1]%=10;              
+			}
+			kq[i+j+1]+=tmp;
+			tmp=0;                                 
+		}
+		if(kq[0]==0) kq.erase(kq.begin());
+		for(int i=0;i<kq.length();i++)	kq[i]+='0';
+		return kq;
 	}
 };
 int main() {
